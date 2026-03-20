@@ -50,6 +50,8 @@
 - Public repo 的內容任何人都可以看到
 
 
+
+📊 [圖解筆記（Branch 與功能說明）](https://simonlifestyles-glitch.github.io/my-notes/charts.html)
 ## Branches 與 Main
 
 - **main** 是正式版本，永遠保持穩定可用
