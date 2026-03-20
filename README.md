@@ -2,11 +2,11 @@
 
 > 給程式小白的 GitHub 入門筆記，從零開始也看得懂。
 
-🔰 [GitHub 是什麼？（視覺化入門）](https://simonlifestyles-glitch.github.io/my-notes/intro.html)
+🔰 [GitHub 是什麼？（視覺化入門）](https://simonlifestyles-glitch.github.io/my-githubnotes/intro.html)
 
-📊 [圖解筆記（Branch 與功能說明）](https://simonlifestyles-glitch.github.io/my-notes/charts.html)
+📊 [圖解筆記（Branch 與功能說明）](https://simonlifestyles-glitch.github.io/my-githubnotes/charts.html)
 
-🗂️ [Repo 導覽列說明（視覺化）](https://simonlifestyles-glitch.github.io/my-notes/navbar.html)
+🗂️ [Repo 導覽列說明（視覺化）](https://simonlifestyles-glitch.github.io/my-githubnotes/navbar.html)
 
 ---
 
