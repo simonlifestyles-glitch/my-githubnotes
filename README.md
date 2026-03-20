@@ -54,7 +54,7 @@
 - HTML + CSS — 一般網頁、筆記
 - JavaScript — 互動效果、動畫
 - Canvas 遊戲 — 例如打磚塊（🎮[試玩看看](https://simonlifestyles-glitch.github.io/my-githubnotes/Breakout-game.html)）
-- 資料視覺化 — D3.js 圖表
+- 資料視覺化 — D3.js 圖表（📊 [D3.js 資料視覺化範例](https://simonlifestyles-glitch.github.io/my-githubnotes/d3-demo.html)）
 
 > 規則只有一個：不能有後端（不能連資料庫、不能跑 Python）。
 > 瀏覽器能執行的，GitHub Pages 就能跑。
