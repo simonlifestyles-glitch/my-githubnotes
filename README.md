@@ -118,3 +118,51 @@
 - **Issues** — 記待辦、追蹤問題
 - **Actions** — 確認自動部署有沒有成功
 - **Settings** — 開啟 GitHub Pages
+
+- ---
+
+## 六、如何在 GitHub 找到開源工具
+
+### 方法一：直接搜尋（最快）
+右上角搜尋框輸入關鍵字，例如 `automation tool`、`note taking`、`data visualization`
+
+搜尋後點 **Repositories**，用篩選器排序：
+- **Most stars** — 最多人認可
+- **Most forks** — 最多人拿去用
+- **Recently updated** — 還有在維護
+
+### 方法二：用 Topics 標籤（最精準）
+每個 repo 都有標籤，直接搜尋標籤：
+- `topic:automation`
+- `topic:self-hosted`
+- `topic:productivity`
+
+或直接開網址：`https://github.com/topics/automation`
+
+### 方法三：Awesome 清單（最省力）
+GitHub 上有專門整理資源的清單，格式是 `awesome-[主題]`：
+- `awesome-selfhosted` — 可以自架的工具大全
+- `awesome-python` — Python 工具精選
+- `awesome-n8n` — n8n 相關資源
+- `awesome-mac` — Mac 工具推薦
+
+搜尋 `awesome` 加上想找的領域，第一個結果通常就是最完整的清單。
+
+### 方法四：Trending（看最近流行什麼）
+網址：`https://github.com/trending`
+
+可以篩選語言、時間範圍（Today / This week / This month），是發現新工具的最佳管道。
+
+---
+
+### 找到後怎麼判斷值不值得用？
+
+| 指標 | 說明 |
+|------|------|
+| ⭐ Stars | 越多代表越多人認可，1000+ 算不錯 |
+| 🍴 Forks | 很多人拿去改，代表實用性高 |
+| 最後更新時間 | 超過一年沒更新要注意，可能沒在維護 |
+| Issues 活躍度 | 有人回報、有人修，代表專案還活著 |
+| README 品質 | 說明清楚、有截圖的通常比較可靠 |
+
+> 💡 對一般人最實用的組合：**Awesome 清單 + Trending**，不用想關鍵字，直接瀏覽就能找到好工具。
