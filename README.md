@@ -1,85 +1,84 @@
 # 📓 GitHub 使用筆記
 
-## 什麼是 GitHub？
-- GitHub 是一個程式碼與文件的雲端托管平台
-- 建立在 Git（版本控制系統）之上
-- 可以記錄每一次修改的歷史，隨時回溯
+> 給程式小白的 GitHub 入門筆記，從零開始也看得懂。
 
-## 核心概念
-
-### Repository（repo）
-- 一個「專案資料夾」
-- 可以放程式碼、筆記、文件、資料集等
-- 分為 Public（公開）和 Private（私人）
-
-### Markdown（.md）
-- 一種輕量排版語法，純文字就能有格式
-- GitHub 會自動把 .md 檔案渲染成排版頁面
-- 常用語法：
-  - `# 大標題`、`## 小標題`
-  - `- 清單項目`
-  - `**粗體**`、`*斜體*`
-
-### Commit
-- 每次儲存變更的動作叫做 commit
-- 會記錄「誰、什麼時候、改了什麼」
-- 相當於一個存檔點
-
-### GitHub Pages
-- 可以把 repo 裡的檔案變成免費網站
-- 網址格式：`https://使用者名稱.github.io/repo名稱`
-- 開啟方式：Settings → Pages → 選 main branch
-
-## 常見用途（不需要寫程式）
-- 📝 寫學習筆記（用 Markdown）
-- 🌐 架靜態個人網站（GitHub Pages）
-- 📂 備份與管理文件
-- 🔍 瀏覽別人的開源專案與資源
-
-## 操作流程：建立筆記網站
-
-1. 註冊 GitHub 帳號
-2. 建立新 Repository（勾選 Add README）
-3. 編輯 README.md，用 Markdown 寫筆記
-4. Commit changes 儲存
-5. Settings → Pages → 開啟，取得網站網址
-
-## 備註
-- 免費帳號就夠一般使用
-- 網頁上就能操作，不需安裝軟體
-- Public repo 的內容任何人都可以看到
-
-
-
-📊 [圖解筆記（Branch 與功能說明）](https://simonlifestyles-glitch.github.io/my-notes/charts.html)
-## Branches 與 Main
-
-- **main** 是正式版本，永遠保持穩定可用
-- **branch** 是平行的實驗空間，可以大膽修改而不影響 main
-- 改好滿意後再「合併（merge）」回 main
-
-類比：main = 書的出版版，branch = 編輯在另一份草稿上改稿
-
-### 使用場景
-- 想新增功能但怕改壞 → 開新 branch 實驗
-- 多人協作，每人在自己的 branch 工作 → 完成後合併
+📊 [視覺化圖解（Branch 與功能說明）](https://simonlifestyles-glitch.github.io/my-notes/charts.html)
 
 ---
 
-## ＋ 選單功能說明
+## 一、GitHub 是什麼？
 
-| 功能 | 用途 | 適合誰 |
-|------|------|--------|
-| New repository | 建新資料夾（最常用） | 所有人 |
-| Import repository | 把別處專案搬進 GitHub | 開發者 |
-| New codespace | 雲端版 VS Code 編輯器 | 開發者 |
-| New issue | 開待辦票，記錄問題或任務 | 所有人 |
-| New gist | 快速分享一段文字或程式碼 | 所有人 |
-| New project | 看板式任務管理（像 Trello） | 進階用 |
-| New organization | 建立團隊帳號，多人共管 repo | 團隊用 |
+可以把 GitHub 想成一個**雲端的資料夾＋時光機**：
 
-### 一般人最常用
-- **New repository** — 建新筆記/專案資料夾
-- **New issue** — 給自己記待辦，或回報軟體問題
-- **New gist** — 快速分享一段文字
-- **New project** — 管理多個任務（進階）
+- 📁 **雲端資料夾** — 把你的筆記、文件、程式碼存在網路上，任何裝置都能存取
+- ⏪ **時光機** — 每次修改都會被記錄，隨時可以回到過去任何一個版本
+- 🌐 **免費網站** — 可以把內容直接變成一個公開網站（GitHub Pages）
+- 👥 **協作空間** — 多人可以同時在同一個專案上工作
+
+**不寫程式也可以用來：** 寫學習筆記、架個人網站、備份文件、管理待辦事項。
+
+---
+
+## 二、幾個你需要知道的詞
+
+### 📁 Repository（repo）— 專案資料夾
+就是一個資料夾，所有東西都放在裡面。
+- **Public** = 任何人都可以看到
+- **Private** = 只有你自己看得到
+
+### 💾 Commit — 存檔
+每次修改完按下儲存的動作。每個 commit 都會記錄「誰、在什麼時候、改了什麼」，就像 Google 文件的版本紀錄。
+
+### 🌿 Main 與 Branch — 正式版 vs 草稿版
+- **main** = 正式出版的版本，永遠保持穩定
+- **branch** = 另開一份草稿來實驗，改壞了也不影響 main，滿意了再合併回去
+
+### 📝 Markdown（.md）— 簡易排版語法
+寫筆記用的格式，純文字就能做出標題、清單、粗體等效果：
+```
+# 大標題
+## 小標題
+- 清單項目
+**粗體文字**
+```
+
+### 🌐 GitHub Pages — 免費網站
+把 repo 裡的檔案直接變成網站，免費、不需要租伺服器。
+網址格式：`https://你的帳號.github.io/repo名稱`
+
+---
+
+## 三、我能用 GitHub 做什麼？
+
+### 🔰 入門：建立筆記網站
+1. 建立新 Repository（勾選 Add a README file）
+2. 點 README.md 右上角鉛筆，用 Markdown 寫筆記
+3. 按 Commit changes 儲存
+4. Settings → Pages → 選 main branch → Save
+5. 等 1～2 分鐘，網站上線 ✅
+
+### 🌿 進階：用 Branch 安全修改
+1. 在 repo 頁面點 branch 選單，輸入新名稱建立 branch
+2. 在新 branch 上自由修改，完全不影響 main
+3. 確認沒問題後，合併（merge）回 main
+
+### ➕ 右上角「＋」選單功能
+
+| 功能 | 白話說明 | 誰會用到 |
+|------|----------|----------|
+| **New repository** | 建新資料夾 | ⭐ 所有人 |
+| **New issue** | 開一張待辦票 | ⭐ 所有人 |
+| **New gist** | 快速貼一段文字分享 | ⭐ 所有人 |
+| **New project** | 建看板管理任務（像 Trello） | 進階用 |
+| Import repository | 把別處專案搬進來 | 開發者 |
+| New codespace | 雲端版編輯器 | 開發者 |
+| New organization | 建立團隊帳號 | 團隊用 |
+
+---
+
+## 四、注意事項
+
+- ✅ 免費帳號就夠一般使用
+- ✅ 網頁上操作即可，不需安裝任何軟體
+- ⚠️ Public repo 任何人都能看到，**不要放個資或密碼**
+- ⚠️ 刪掉的內容在 commit 歷史裡還是找得到，敏感資訊從一開始就不要放
