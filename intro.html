@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub 是什麼？</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f5f2ec;
+  --bg2: #edeae2;
+  --ink: #1a1814;
+  --ink2: #4a4740;
+  --ink3: #8a8780;
+  --accent: #c84b2f;
+  --teal: #2a7a6a;
+  --blue: #2a4a8a;
+  --border: rgba(26,24,20,0.12);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+.wrap { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+/* Hero */
+.hero {
+  padding: 80px 0 64px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.hero-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  animation: fadeUp 0.6s 0s ease forwards;
+}
+.hero-eyebrow::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--accent);
+}
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(48px, 9vw, 88px);
+  line-height: 1.0;
+  color: var(--ink);
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.1s ease forwards;
+}
+.hero h1 em { font-style: italic; color: var(--accent); }
+.hero-sub {
+  font-size: 17px;
+  color: var(--ink2);
+  max-width: 520px;
+  line-height: 1.8;
+  font-weight: 300;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.2s ease forwards;
+}
+.hero-deco {
+  position: absolute;
+  right: -60px;
+  top: 20px;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  pointer-events: none;
+}
+.hero-deco::after {
+  content: '';
+  position: absolute;
+  inset: 50px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+}
+
+/* Section label */
+.section-label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  font-weight: 500;
+  margin-bottom: 32px;
+}
+
+/* Analogy grid */
+.analogy-section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+.analogy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.analogy-card {
+  background: var(--bg);
+  padding: 36px 32px;
+  transition: background 0.2s;
+}
+.analogy-card:hover { background: var(--bg2); }
+.analogy-card .icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+.analogy-card h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+.analogy-card .sub {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.analogy-card p { font-size: 14px; color: var(--ink2); line-height: 1.75; }
+.analogy-card .tag {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.c-teal .icon-wrap { background: rgba(42,122,106,0.1); }
+.c-teal .tag { background: rgba(42,122,106,0.12); color: var(--teal); }
+.c-blue .icon-wrap { background: rgba(42,74,138,0.1); }
+.c-blue .tag { background: rgba(42,74,138,0.12); color: var(--blue); }
+.c-red .icon-wrap { background: rgba(200,75,47,0.1); }
+.c-red .tag { background: rgba(200,75,47,0.12); color: var(--accent); }
+.c-amber .icon-wrap { background: rgba(232,160,32,0.1); }
+.c-amber .tag { background: rgba(232,160,32,0.12); color: #8a5010; }
+
+/* Big quote */
+.big-quote {
+  padding: 72px 0;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+.big-quote blockquote {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(22px, 3.5vw, 34px);
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 660px;
+  margin: 0 auto 20px;
+}
+.big-quote blockquote span { color: var(--accent); font-style: italic; }
+.big-quote .attribution { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink3); }
+
+/* Uses */
+.uses-section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+.uses-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+  margin-bottom: 48px;
+}
+.uses-header h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.uses-header p { font-size: 15px; color: var(--ink2); line-height: 1.8; font-weight: 300; padding-top: 6px; }
+
+.uses-list { display: flex; flex-direction: column; gap: 3px; }
+.use-row {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 20px;
+  padding: 22px 28px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: background 0.2s, transform 0.18s;
+  cursor: default;
+  opacity: 0;
+  transform: translateY(14px);
+}
+.use-row:hover { background: var(--bg2); transform: translateX(6px); }
+.use-row .num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px;
+  color: rgba(26,24,20,0.15);
+  line-height: 1;
+}
+.use-row .content h4 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+.use-row .content p { font-size: 13px; color: var(--ink2); }
+.use-row .pill {
+  white-space: nowrap;
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--ink3);
+}
+
+/* Timeline */
+.timeline-section { padding: 72px 0; }
+.timeline-section h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(26px, 3.5vw, 40px);
+  margin-bottom: 8px;
+}
+.timeline-section .lead { color: var(--ink2); font-size: 15px; margin-bottom: 48px; font-weight: 300; }
+
+.timeline { position: relative; padding-left: 36px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px; top: 8px; bottom: 8px;
+  width: 1px;
+  background: var(--border);
+}
+.tl-item {
+  position: relative;
+  margin-bottom: 44px;
+  opacity: 0;
+  transform: translateX(-10px);
+}
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -30px; top: 6px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  transition: border-color 0.2s, background 0.2s;
+}
+.tl-item:hover::before { border-color: var(--accent); background: var(--accent); }
+.tl-item .tl-step {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.tl-item h4 { font-size: 17px; font-weight: 700; margin-bottom: 5px; }
+.tl-item p { font-size: 14px; color: var(--ink2); max-width: 560px; line-height: 1.75; }
+.tl-item .example {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--accent);
+  background: rgba(200,75,47,0.08);
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* Footer */
+footer {
+  padding: 36px 0;
+  border-top: 1px solid var(--border);
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+footer .fn { font-size: 12px; color: var(--ink3); }
+footer a {
+  font-size: 12px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(200,75,47,0.3);
+  padding-bottom: 1px;
+  transition: border-color 0.2s;
+}
+footer a:hover { border-color: var(--accent); }
+
+/* Animations */
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideIn {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.use-row:nth-child(1) { animation: fadeUp 0.5s 0.05s ease forwards; }
+.use-row:nth-child(2) { animation: fadeUp 0.5s 0.15s ease forwards; }
+.use-row:nth-child(3) { animation: fadeUp 0.5s 0.25s ease forwards; }
+.use-row:nth-child(4) { animation: fadeUp 0.5s 0.35s ease forwards; }
+.use-row:nth-child(5) { animation: fadeUp 0.5s 0.45s ease forwards; }
+
+.tl-item:nth-child(1) { animation: slideIn 0.5s 0.05s ease forwards; }
+.tl-item:nth-child(2) { animation: slideIn 0.5s 0.15s ease forwards; }
+.tl-item:nth-child(3) { animation: slideIn 0.5s 0.25s ease forwards; }
+.tl-item:nth-child(4) { animation: slideIn 0.5s 0.35s ease forwards; }
+
+@media (max-width: 640px) {
+  .analogy-grid { grid-template-columns: 1fr; }
+  .uses-header { grid-template-columns: 1fr; gap: 12px; }
+  .use-row { grid-template-columns: 36px 1fr; }
+  .use-row .pill { display: none; }
+  .hero-deco { display: none; }
+  .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-deco"></div>
+    <p class="hero-eyebrow">程式小白的 GitHub 入門</p>
+    <h1>GitHub<br>是<em>什麼</em>？</h1>
+    <p class="hero-sub">不需要會寫程式，也能理解並使用 GitHub。用最直覺的方式帶你認識這個工具。</p>
+  </div>
+</section>
+
+<section class="analogy-section">
+  <div class="wrap">
+    <p class="section-label">用四個類比來理解</p>
+    <div class="analogy-grid">
+
+      <div class="analogy-card c-teal">
+        <div class="icon-wrap">☁️</div>
+        <p class="sub">第一個概念</p>
+        <h3>雲端硬碟</h3>
+        <p>就像 Google Drive，你的檔案存在網路上，任何裝置、任何地方都能存取，不怕電腦壞掉或遺失。</p>
+        <span class="tag">存放內容</span>
+      </div>
+
+      <div class="analogy-card c-blue">
+        <div class="icon-wrap">⏪</div>
+        <p class="sub">第二個概念</p>
+        <h3>時光機</h3>
+        <p>每次修改都會被記錄，隨時可以回到過去任何一個版本。就像 Google 文件的版本紀錄，但功能更強大。</p>
+        <span class="tag">版本控制</span>
+      </div>
+
+      <div class="analogy-card c-red">
+        <div class="icon-wrap">🌐</div>
+        <p class="sub">第三個概念</p>
+        <h3>免費網站主機</h3>
+        <p>把你的筆記或 HTML 檔案直接變成一個有網址的公開網站，不需要租伺服器，完全免費。</p>
+        <span class="tag">GitHub Pages</span>
+      </div>
+
+      <div class="analogy-card c-amber">
+        <div class="icon-wrap">👥</div>
+        <p class="sub">第四個概念</p>
+        <h3>協作空間</h3>
+        <p>多人可以同時在同一個專案上工作，每個人的修改都被追蹤記錄，不會互相覆蓋或衝突。</p>
+        <span class="tag">團隊合作</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="big-quote">
+  <div class="wrap">
+    <blockquote>
+      GitHub 就像一本<span>有自動存檔、可以協作、<br>還能對外公開</span>的筆記本。
+    </blockquote>
+    <p class="attribution">給程式小白的一句話總結</p>
+  </div>
+</section>
+
+<section class="uses-section">
+  <div class="wrap">
+    <div class="uses-header">
+      <h2>不寫程式，<br>也能用它來做什麼？</h2>
+      <p>GitHub 不是工程師的專利。以下是一般人實際用得到的場景，從最簡單的開始排列。</p>
+    </div>
+
+    <div class="uses-list">
+      <div class="use-row">
+        <span class="num">01</span>
+        <div class="content">
+          <h4>📝 寫學習筆記</h4>
+          <p>用 Markdown 格式寫筆記，GitHub 自動排版，還能追蹤每次修改的歷史。</p>
+        </div>
+        <span class="pill">最入門</span>
+      </div>
+      <div class="use-row">
+        <span class="num">02</span>
+        <div class="content">
+          <h4>🌐 架免費個人網站</h4>
+          <p>開啟 GitHub Pages，把你的筆記或 HTML 變成一個有網址的公開網站，完全不用花錢。</p>
+        </div>
+        <span class="pill">本筆記就是</span>
+      </div>
+      <div class="use-row">
+        <span class="num">03</span>
+        <div class="content">
+          <h4>📂 備份與管理文件</h4>
+          <p>重要文件、資料集、設計資源都可以放上去，不怕遺失，還能從任何地方存取。</p>
+        </div>
+        <span class="pill">日常實用</span>
+      </div>
+      <div class="use-row">
+        <span class="num">04</span>
+        <div class="content">
+          <h4>🎫 管理待辦事項</h4>
+          <p>用 Issue 功能開待辦票、追蹤進度；用 Project 建看板，就像輕量版的 Trello。</p>
+        </div>
+        <span class="pill">進階用法</span>
+      </div>
+      <div class="use-row">
+        <span class="num">05</span>
+        <div class="content">
+          <h4>🔍 找免費資源</h4>
+          <p>全球開發者把免費工具、字體、模板、資料集都放在 GitHub 上，直接搜尋下載使用。</p>
+        </div>
+        <span class="pill">資源寶庫</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="timeline-section">
+  <div class="wrap">
+    <p class="section-label">一次操作的完整流程</p>
+    <h2>從寫一個字，到變成網站</h2>
+    <p class="lead">每次你在 GitHub 上做的事，背後其實就是這四個步驟。</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <p class="tl-step">Step 01</p>
+        <h4>建立 Repository（資料夾）</h4>
+        <p>每個專案或筆記本都放在一個 repo 裡。就像在桌面新增一個資料夾，但這個資料夾存在雲端。</p>
+        <span class="example">類比：在 Google Drive 新增資料夾</span>
+      </div>
+      <div class="tl-item">
+        <p class="tl-step">Step 02</p>
+        <h4>編輯內容</h4>
+        <p>直接在網頁上編輯 README.md，用 Markdown 語法寫出有格式的筆記。不需要安裝任何軟體。</p>
+        <span class="example">類比：在 Google Docs 打字</span>
+      </div>
+      <div class="tl-item">
+        <p class="tl-step">Step 03</p>
+        <h4>Commit（存檔）</h4>
+        <p>按下「Commit changes」，這次修改就被永久記錄下來。每個 commit 都有時間戳記，可隨時回溯。</p>
+        <span class="example">類比：按下「儲存」，但可以無限回溯</span>
+      </div>
+      <div class="tl-item">
+        <p class="tl-step">Step 04</p>
+        <h4>GitHub Pages 自動發布</h4>
+        <p>開啟 Pages 功能後，每次 commit 都會自動更新你的網站。約 1～2 分鐘後即可看到新版本。</p>
+        <span class="example">類比：存檔後網站自動同步更新</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <span class="fn">📓 GitHub 使用筆記 — simonlifestyles-glitch</span>
+      <a href="index.html">← 回筆記首頁</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
