@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D3.js 資料視覺化範例</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #1c2128;
+  --border: rgba(255,255,255,0.08);
+  --text: #e6edf3;
+  --muted: #7d8590;
+  --teal: #2dd4bf;
+  --blue: #60a5fa;
+  --purple: #a78bfa;
+  --amber: #fbbf24;
+  --pink: #f472b6;
+  --green: #4ade80;
+  --red: #f87171;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  padding: 40px 24px;
+}
+.wrap { max-width: 860px; margin: 0 auto; }
+
+/* Header */
+.page-header { margin-bottom: 48px; }
+.eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.eyebrow::after { content:''; width:32px; height:1px; background:var(--teal); }
+.page-header h1 {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(24px, 4vw, 40px);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+.page-header h1 span { color: var(--teal); }
+.page-header p { color: var(--muted); font-size: 14px; max-width: 500px; font-weight: 300; }
+
+/* Tabs */
+.tabs {
+  display: flex; gap: 4px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 28px;
+}
+.tab {
+  flex: 1; padding: 10px 8px;
+  border: none; border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+.tab:hover { color: var(--text); }
+.tab.active { background: var(--bg3); color: var(--text); border: 1px solid var(--border); }
+
+/* Chart card */
+.chart-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 20px;
+  display: none;
+}
+.chart-card.visible { display: block; }
+.chart-card h2 {
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  letter-spacing: 0.04em;
+}
+.chart-card .desc { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+
+/* Tooltip */
+.tooltip {
+  position: fixed;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-family: 'Space Mono', monospace;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 100;
+  line-height: 1.6;
+}
+.tooltip strong { color: var(--teal); display: block; margin-bottom: 2px; }
+
+/* SVG defaults */
+svg { overflow: visible; }
+.axis text { font-family: 'Space Mono', monospace; font-size: 11px; fill: var(--muted); }
+.axis line, .axis path { stroke: var(--border); }
+.grid line { stroke: var(--border); stroke-dasharray: 3 3; }
+.grid path { display: none; }
+
+/* Legend */
+.legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 20px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+/* Footer */
+footer { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+footer span { font-size: 12px; color: var(--muted); font-family: 'Space Mono', monospace; }
+footer a { font-size: 12px; color: var(--teal); text-decoration: none; border: 1px solid rgba(45,212,191,0.2); padding: 6px 14px; border-radius: 20px; transition: border-color 0.2s; font-family: 'Space Mono', monospace; }
+footer a:hover { border-color: var(--teal); }
+
+@media (max-width: 560px) {
+  .tabs { flex-wrap: wrap; }
+  .tab { flex: 1 1 40%; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="page-header">
+    <p class="eyebrow">D3.js 互動範例</p>
+    <h1>資料<span>視覺化</span></h1>
+    <p>滑鼠懸停在圖表上可以看到詳細數據。點選下方標籤切換不同圖表類型。</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showChart('bar')">長條圖</button>
+    <button class="tab" onclick="showChart('line')">折線圖</button>
+    <button class="tab" onclick="showChart('donut')">環形圖</button>
+    <button class="tab" onclick="showChart('scatter')">泡泡圖</button>
+  </div>
+
+  <!-- Bar Chart -->
+  <div class="chart-card visible" id="chart-bar">
+    <h2>每月學習時數</h2>
+    <p class="desc">2024 年各月份的學習記錄，滑鼠懸停查看詳細數值。</p>
+    <svg id="svg-bar"></svg>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>學習時數（小時）</div>
+    </div>
+  </div>
+
+  <!-- Line Chart -->
+  <div class="chart-card" id="chart-line">
+    <h2>技能成長曲線</h2>
+    <p class="desc">三個技能領域在過去六個月的熟練度變化。</p>
+    <svg id="svg-line"></svg>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>GitHub</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>n8n 自動化</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>資料視覺化</div>
+    </div>
+  </div>
+
+  <!-- Donut Chart -->
+  <div class="chart-card" id="chart-donut">
+    <h2>時間分配比例</h2>
+    <p class="desc">每週各類型活動的時間佔比，點選區塊查看詳情。</p>
+    <svg id="svg-donut"></svg>
+  </div>
+
+  <!-- Scatter / Bubble -->
+  <div class="chart-card" id="chart-scatter">
+    <h2>工具評比泡泡圖</h2>
+    <p class="desc">各工具的易用性 vs 功能強度，泡泡大小代表使用頻率。</p>
+    <svg id="svg-scatter"></svg>
+  </div>
+
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<footer>
+  <span>my-notes / d3-demo</span>
+  <a href="index.html">← 回筆記首頁</a>
+</footer>
+
+<script>
+const W = Math.min(document.querySelector('.wrap').offsetWidth - 64, 780);
+const tooltip = document.getElementById('tooltip');
+
+function showTip(html, e) {
+  tooltip.innerHTML = html;
+  tooltip.style.opacity = 1;
+  moveTip(e);
+}
+function moveTip(e) {
+  const x = e.clientX + 14, y = e.clientY - 10;
+  tooltip.style.left = Math.min(x, window.innerWidth - 200) + 'px';
+  tooltip.style.top = y + 'px';
+}
+function hideTip() { tooltip.style.opacity = 0; }
+
+function showChart(id) {
+  document.querySelectorAll('.chart-card').forEach(c => c.classList.remove('visible'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('chart-' + id).classList.add('visible');
+  event.target.classList.add('active');
+}
+
+/* ── BAR CHART ── */
+(function() {
+  const data = [
+    { month: '1月', hours: 12 }, { month: '2月', hours: 18 },
+    { month: '3月', hours: 15 }, { month: '4月', hours: 22 },
+    { month: '5月', hours: 28 }, { month: '6月', hours: 24 },
+    { month: '7月', hours: 31 }, { month: '8月', hours: 27 },
+    { month: '9月', hours: 35 }, { month: '10月', hours: 40 },
+    { month: '11月', hours: 38 }, { month: '12月', hours: 42 },
+  ];
+  const margin = { top: 20, right: 20, bottom: 36, left: 44 };
+  const H = 280;
+  const iW = W - margin.left - margin.right;
+  const iH = H - margin.top - margin.bottom;
+  const svg = d3.select('#svg-bar')
+    .attr('width', W).attr('height', H);
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const x = d3.scaleBand().domain(data.map(d=>d.month)).range([0,iW]).padding(0.28);
+  const y = d3.scaleLinear().domain([0, 50]).range([iH, 0]);
+
+  // Grid
+  g.append('g').attr('class','grid')
+    .call(d3.axisLeft(y).ticks(5).tickSize(-iW).tickFormat(''));
+
+  // Axes
+  g.append('g').attr('class','axis').attr('transform',`translate(0,${iH})`)
+    .call(d3.axisBottom(x).tickSize(0)).select('.domain').remove();
+  g.append('g').attr('class','axis')
+    .call(d3.axisLeft(y).ticks(5).tickFormat(d=>d+'h')).select('.domain').remove();
+
+  // Bars
+  g.selectAll('.bar').data(data).enter().append('rect')
+    .attr('class','bar')
+    .attr('x', d => x(d.month))
+    .attr('width', x.bandwidth())
+    .attr('y', iH).attr('height', 0)
+    .attr('rx', 4)
+    .attr('fill', (d,i) => d3.interpolateCool(0.3 + i/data.length * 0.5))
+    .on('mousemove', (e,d) => showTip(`<strong>${d.month}</strong>${d.hours} 小時`, e))
+    .on('mouseleave', hideTip)
+    .transition().duration(600).delay((_,i)=>i*40)
+    .attr('y', d => y(d.hours))
+    .attr('height', d => iH - y(d.hours));
+})();
+
+/* ── LINE CHART ── */
+(function() {
+  const months = ['1月','2月','3月','4月','5月','6月'];
+  const series = [
+    { name: 'GitHub', color: 'var(--teal)', values: [10,25,40,55,70,82] },
+    { name: 'n8n 自動化', color: 'var(--purple)', values: [5,15,30,48,60,75] },
+    { name: '資料視覺化', color: 'var(--amber)', values: [0,5,10,20,38,55] },
+  ];
+  const margin = { top: 20, right: 20, bottom: 36, left: 44 };
+  const H = 280;
+  const iW = W - margin.left - margin.right;
+  const iH = H - margin.top - margin.bottom;
+  const svg = d3.select('#svg-line').attr('width',W).attr('height',H);
+  const g = svg.append('g').attr('transform',`translate(${margin.left},${margin.top})`);
+
+  const x = d3.scalePoint().domain(months).range([0,iW]);
+  const y = d3.scaleLinear().domain([0,100]).range([iH,0]);
+
+  g.append('g').attr('class','grid')
+    .call(d3.axisLeft(y).ticks(5).tickSize(-iW).tickFormat(''));
+  g.append('g').attr('class','axis').attr('transform',`translate(0,${iH})`)
+    .call(d3.axisBottom(x).tickSize(0)).select('.domain').remove();
+  g.append('g').attr('class','axis')
+    .call(d3.axisLeft(y).ticks(5).tickFormat(d=>d+'%')).select('.domain').remove();
+
+  const line = d3.line().x((_,i)=>x(months[i])).y(d=>y(d)).curve(d3.curveCatmullRom);
+
+  series.forEach(s => {
+    // Area fill
+    const area = d3.area().x((_,i)=>x(months[i])).y0(iH).y1(d=>y(d)).curve(d3.curveCatmullRom);
+    g.append('path').datum(s.values)
+      .attr('fill', s.color).attr('opacity', 0.06)
+      .attr('d', area);
+    // Line
+    const path = g.append('path').datum(s.values)
+      .attr('fill','none').attr('stroke', s.color)
+      .attr('stroke-width', 2.5).attr('d', line);
+    const len = path.node().getTotalLength();
+    path.attr('stroke-dasharray', len).attr('stroke-dashoffset', len)
+      .transition().duration(1000).attr('stroke-dashoffset', 0);
+    // Dots
+    g.selectAll(null).data(s.values).enter().append('circle')
+      .attr('cx', (_,i)=>x(months[i])).attr('cy', d=>y(d))
+      .attr('r', 5).attr('fill', s.color).attr('opacity', 0)
+      .on('mousemove', (e,d,nodes) => {
+        const i = s.values.indexOf(d);
+        showTip(`<strong>${s.name} — ${months[i]}</strong>熟練度：${d}%`, e);
+      })
+      .on('mouseleave', hideTip)
+      .transition().delay(900).duration(200).attr('opacity', 1);
+  });
+})();
+
+/* ── DONUT CHART ── */
+(function() {
+  const data = [
+    { label: '學習', value: 30, color: 'var(--teal)' },
+    { label: '工作', value: 35, color: 'var(--blue)' },
+    { label: '自動化開發', value: 15, color: 'var(--purple)' },
+    { label: '休息', value: 12, color: 'var(--amber)' },
+    { label: '其他', value: 8, color: 'var(--muted)' },
+  ];
+  const size = Math.min(W, 380);
+  const cx = W / 2, cy = size / 2;
+  const outerR = size / 2 - 20, innerR = outerR * 0.58;
+  const svg = d3.select('#svg-donut').attr('width', W).attr('height', size);
+  const g = svg.append('g').attr('transform', `translate(${cx},${cy})`);
+
+  const pie = d3.pie().value(d=>d.value).sort(null).padAngle(0.025);
+  const arc = d3.arc().innerRadius(innerR).outerRadius(outerR).cornerRadius(4);
+  const arcHover = d3.arc().innerRadius(innerR).outerRadius(outerR + 10).cornerRadius(4);
+
+  const arcs = g.selectAll('.arc').data(pie(data)).enter().append('g').attr('class','arc');
+
+  arcs.append('path')
+    .attr('fill', d => d.data.color)
+    .attr('opacity', 0.85)
+    .attr('d', arc)
+    .on('mousemove', (e,d) => {
+      showTip(`<strong>${d.data.label}</strong>${d.data.value}% 的時間`, e);
+      d3.select(e.target).transition().duration(100).attr('d', arcHover).attr('opacity', 1);
+    })
+    .on('mouseleave', (e,d) => {
+      hideTip();
+      d3.select(e.target).transition().duration(150).attr('d', arc).attr('opacity', 0.85);
+    })
+    .transition().duration(700).delay((_,i)=>i*80)
+    .attrTween('d', function(d) {
+      const i = d3.interpolate({ startAngle: 0, endAngle: 0 }, d);
+      return t => arc(i(t));
+    });
+
+  // Center text
+  g.append('text').attr('text-anchor','middle').attr('dy','-0.2em')
+    .attr('font-family','Space Mono, monospace').attr('font-size','28px')
+    .attr('font-weight','700').attr('fill','var(--text)').text('168');
+  g.append('text').attr('text-anchor','middle').attr('dy','1.4em')
+    .attr('font-size','12px').attr('fill','var(--muted)').text('小時/週');
+
+  // Legend on side
+  const legendG = svg.append('g').attr('transform', `translate(${W - 160}, ${size/2 - data.length*14})`);
+  data.forEach((d, i) => {
+    const row = legendG.append('g').attr('transform', `translate(0,${i*28})`);
+    row.append('circle').attr('r', 6).attr('fill', d.color);
+    row.append('text').attr('x', 14).attr('dy','0.35em')
+      .attr('font-size','12px').attr('fill','var(--muted)').text(`${d.label} ${d.value}%`);
+  });
+})();
+
+/* ── BUBBLE / SCATTER ── */
+(function() {
+  const data = [
+    { name: 'GitHub', x: 68, y: 80, r: 22, color: 'var(--teal)' },
+    { name: 'n8n', x: 82, y: 75, r: 28, color: 'var(--purple)' },
+    { name: 'Notion', x: 88, y: 65, r: 32, color: 'var(--blue)' },
+    { name: 'VS Code', x: 55, y: 90, r: 20, color: 'var(--amber)' },
+    { name: 'Figma', x: 78, y: 72, r: 18, color: 'var(--pink)' },
+    { name: 'Python', x: 35, y: 92, r: 14, color: 'var(--green)' },
+    { name: 'D3.js', x: 30, y: 95, r: 12, color: 'var(--red)' },
+  ];
+  const margin = { top: 20, right: 20, bottom: 44, left: 52 };
+  const H = 300;
+  const iW = W - margin.left - margin.right;
+  const iH = H - margin.top - margin.bottom;
+  const svg = d3.select('#svg-scatter').attr('width',W).attr('height',H);
+  const g = svg.append('g').attr('transform',`translate(${margin.left},${margin.top})`);
+
+  const x = d3.scaleLinear().domain([20,100]).range([0,iW]);
+  const y = d3.scaleLinear().domain([55,100]).range([iH,0]);
+
+  g.append('g').attr('class','grid').call(d3.axisLeft(y).ticks(5).tickSize(-iW).tickFormat(''));
+  g.append('g').attr('class','grid').attr('transform',`translate(0,${iH})`).call(d3.axisBottom(x).ticks(5).tickSize(-iH).tickFormat(''));
+
+  g.append('g').attr('class','axis').attr('transform',`translate(0,${iH})`)
+    .call(d3.axisBottom(x).ticks(5).tickFormat(d=>d+'%')).select('.domain').remove();
+  g.append('g').attr('class','axis')
+    .call(d3.axisLeft(y).ticks(5).tickFormat(d=>d+'%')).select('.domain').remove();
+
+  // Axis labels
+  svg.append('text').attr('x', margin.left + iW/2).attr('y', H - 4)
+    .attr('text-anchor','middle').attr('font-size','11px').attr('fill','var(--muted)')
+    .attr('font-family','Space Mono, monospace').text('易用性 →');
+  svg.append('text').attr('transform','rotate(-90)')
+    .attr('x', -(margin.top + iH/2)).attr('y', 14)
+    .attr('text-anchor','middle').attr('font-size','11px').attr('fill','var(--muted)')
+    .attr('font-family','Space Mono, monospace').text('← 功能強度');
+
+  const bubbles = g.selectAll('.bubble').data(data).enter().append('g').attr('class','bubble');
+
+  bubbles.append('circle')
+    .attr('cx', d=>x(d.x)).attr('cy', d=>y(d.y))
+    .attr('r', 0).attr('fill', d=>d.color).attr('opacity', 0.7)
+    .on('mousemove', (e,d) => showTip(`<strong>${d.name}</strong>易用性：${d.x}%<br>功能強度：${d.y}%`, e))
+    .on('mouseleave', hideTip)
+    .on('mouseenter', (e,d) => d3.select(e.target).transition().duration(100).attr('r', d.r * 1.2).attr('opacity', 1))
+    .on('mouseleave', (e,d) => { hideTip(); d3.select(e.target).transition().duration(150).attr('r', d.r).attr('opacity', 0.7); })
+    .transition().duration(500).delay((_,i)=>i*60).attr('r', d=>d.r);
+
+  bubbles.append('text')
+    .attr('x', d=>x(d.x)).attr('y', d=>y(d.y)+4)
+    .attr('text-anchor','middle').attr('font-size','11px')
+    .attr('font-family','Space Mono, monospace')
+    .attr('fill','var(--bg)').attr('font-weight','700')
+    .attr('pointer-events','none')
+    .text(d=>d.name);
+})();
+</script>
+</body>
+</html>
