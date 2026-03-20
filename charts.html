@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub 視覺化筆記</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f1117;
+    --bg2: #181c27;
+    --bg3: #1e2330;
+    --border: rgba(255,255,255,0.08);
+    --text: #e8eaf0;
+    --muted: #8b90a0;
+    --teal: #2dd4bf;
+    --teal-dim: rgba(45,212,191,0.12);
+    --purple: #a78bfa;
+    --purple-dim: rgba(167,139,250,0.12);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251,191,36,0.12);
+    --coral: #f87171;
+    --coral-dim: rgba(248,113,113,0.12);
+    --green: #4ade80;
+    --green-dim: rgba(74,222,128,0.12);
+    --blue: #60a5fa;
+    --blue-dim: rgba(96,165,250,0.12);
+    --gray-dim: rgba(255,255,255,0.05);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    padding: 48px 24px;
+  }
+
+  .page-wrap { max-width: 860px; margin: 0 auto; }
+
+  /* Header */
+  header { text-align: center; margin-bottom: 64px; }
+  .tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--teal);
+    border: 1px solid rgba(45,212,191,0.3);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  h1 { font-size: 32px; font-weight: 700; color: #fff; line-height: 1.2; }
+  h1 span { color: var(--teal); }
+  .subtitle { color: var(--muted); margin-top: 8px; font-size: 14px; }
+
+  /* Section */
+  section { margin-bottom: 56px; }
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .desc { color: var(--muted); font-size: 14px; margin-bottom: 28px; max-width: 600px; }
+
+  /* Card */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    overflow: hidden;
+  }
+
+  /* Branch diagram */
+  .branch-svg { width: 100%; display: block; }
+
+  /* Analogy box */
+  .analogy {
+    margin-top: 20px;
+    background: var(--teal-dim);
+    border: 1px solid rgba(45,212,191,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .analogy strong { color: var(--teal); }
+
+  /* Menu grid */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .menu-card {
+    border-radius: 12px;
+    padding: 18px 20px;
+    border: 1px solid transparent;
+    transition: transform 0.18s, box-shadow 0.18s;
+  }
+  .menu-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+  .menu-card .icon { font-size: 20px; margin-bottom: 8px; }
+  .menu-card .name {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .menu-card .use { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .menu-card .badge {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .c-teal  { background: var(--teal-dim);   border-color: rgba(45,212,191,0.2);  }
+  .c-teal  .name { color: var(--teal); }
+  .c-teal  .badge { background: rgba(45,212,191,0.15); color: var(--teal); }
+
+  .c-blue  { background: var(--blue-dim);   border-color: rgba(96,165,250,0.2);  }
+  .c-blue  .name { color: var(--blue); }
+  .c-blue  .badge { background: rgba(96,165,250,0.15); color: var(--blue); }
+
+  .c-purple{ background: var(--purple-dim); border-color: rgba(167,139,250,0.2); }
+  .c-purple .name { color: var(--purple); }
+  .c-purple .badge { background: rgba(167,139,250,0.15); color: var(--purple); }
+
+  .c-amber { background: var(--amber-dim);  border-color: rgba(251,191,36,0.2);  }
+  .c-amber .name { color: var(--amber); }
+  .c-amber .badge { background: rgba(251,191,36,0.15); color: var(--amber); }
+
+  .c-coral { background: var(--coral-dim);  border-color: rgba(248,113,113,0.2); }
+  .c-coral .name { color: var(--coral); }
+  .c-coral .badge { background: rgba(248,113,113,0.15); color: var(--coral); }
+
+  .c-green { background: var(--green-dim);  border-color: rgba(74,222,128,0.2);  }
+  .c-green .name { color: var(--green); }
+  .c-green .badge { background: rgba(74,222,128,0.15); color: var(--green); }
+
+  .c-gray  { background: var(--gray-dim);   border-color: rgba(255,255,255,0.08);}
+  .c-gray  .name { color: #c0c4d0; }
+  .c-gray  .badge { background: rgba(255,255,255,0.08); color: var(--muted); }
+
+  /* Highlight row */
+  .highlight-row {
+    background: rgba(45,212,191,0.06);
+    border: 1px solid rgba(45,212,191,0.15);
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+  .highlight-row h3 { font-size: 14px; color: var(--teal); font-weight: 700; margin-bottom: 12px; font-family: 'Space Mono', monospace; letter-spacing: 0.06em; text-transform: uppercase; }
+  .highlight-row ul { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; }
+  .highlight-row li {
+    background: rgba(45,212,191,0.1);
+    border: 1px solid rgba(45,212,191,0.2);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .highlight-row li span { color: var(--teal); font-weight: 700; margin-right: 4px; }
+
+  /* Back link */
+  .back { text-align: center; margin-top: 48px; }
+  .back a {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 8px 20px;
+    border-radius: 20px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .back a:hover { color: var(--teal); border-color: rgba(45,212,191,0.3); }
+
+  @media (max-width: 600px) {
+    .menu-grid { grid-template-columns: 1fr 1fr; }
+    h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header>
+    <div class="tag">GitHub 視覺化筆記</div>
+    <h1>圖解 <span>GitHub</span> 核心概念</h1>
+    <p class="subtitle">Branch 運作方式 ＋ 常用功能一覽</p>
+  </header>
+
+  <!-- Section 1: Branch -->
+  <section>
+    <div class="section-label">01 — Branches</div>
+    <h2>Main 與 Branch 的關係</h2>
+    <p class="desc">main 是穩定的正式版本，branch 是隔離的實驗空間，改好了再合併回來。</p>
+
+    <div class="card">
+      <svg class="branch-svg" viewBox="0 0 780 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- Labels left -->
+        <text x="20" y="130" font-family="Space Mono, monospace" font-size="11" fill="#2dd4bf" font-weight="700">main</text>
+        <text x="20" y="60" font-family="Space Mono, monospace" font-size="11" fill="#a78bfa" font-weight="700">branch</text>
+
+        <!-- Main line -->
+        <line x1="100" y1="125" x2="700" y2="125" stroke="rgba(45,212,191,0.3)" stroke-width="1.5"/>
+
+        <!-- Main commits -->
+        <circle cx="160" cy="125" r="14" fill="rgba(45,212,191,0.15)" stroke="#2dd4bf" stroke-width="1.5"/>
+        <text x="160" y="130" text-anchor="middle" font-family="Space Mono, monospace" font-size="10" fill="#2dd4bf">v1</text>
+
+        <circle cx="300" cy="125" r="14" fill="rgba(45,212,191,0.15)" stroke="#2dd4bf" stroke-width="1.5"/>
+        <text x="300" y="130" text-anchor="middle" font-family="Space Mono, monospace" font-size="10" fill="#2dd4bf">v2</text>
+
+        <circle cx="600" cy="125" r="14" fill="rgba(45,212,191,0.25)" stroke="#2dd4bf" stroke-width="2"/>
+        <text x="600" y="130" text-anchor="middle" font-family="Space Mono, monospace" font-size="10" fill="#2dd4bf">v3</text>
+        <text x="600" y="155" text-anchor="middle" font-family="Noto Sans TC, sans-serif" font-size="11" fill="#2dd4bf">合併完成</text>
+
+        <!-- Dashed main between v2 and v3 -->
+        <line x1="314" y1="125" x2="586" y2="125" stroke="rgba(45,212,191,0.15)" stroke-width="1.5" stroke-dasharray="6 4"/>
+
+        <!-- Branch path -->
+        <path d="M300 111 Q300 55 340 55 L520 55" fill="none" stroke="rgba(167,139,250,0.4)" stroke-width="1.5"/>
+
+        <!-- Branch commits -->
+        <circle cx="380" cy="55" r="13" fill="rgba(167,139,250,0.15)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="380" y="59" text-anchor="middle" font-family="Noto Sans TC, sans-serif" font-size="10" fill="#a78bfa">修改A</text>
+
+        <circle cx="480" cy="55" r="13" fill="rgba(167,139,250,0.15)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="480" y="59" text-anchor="middle" font-family="Noto Sans TC, sans-serif" font-size="10" fill="#a78bfa">修改B</text>
+
+        <!-- Merge arrow -->
+        <path d="M493 55 Q560 55 586 111" fill="none" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <!-- Annotation -->
+        <text x="390" y="170" text-anchor="middle" font-family="Noto Sans TC, sans-serif" font-size="12" fill="rgba(255,255,255,0.35)">實驗、修改，不影響 main</text>
+        <text x="600" y="178" text-anchor="middle" font-family="Noto Sans TC, sans-serif" font-size="12" fill="rgba(255,255,255,0.35)">滿意後合併</text>
+      </svg>
+
+      <div class="analogy">
+        <strong>類比：</strong>main 是書的出版版，branch 是編輯在另一份草稿上改稿——改完、確認沒問題，才更新正式版。
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Plus menu -->
+  <section>
+    <div class="section-label">02 — ＋ 選單</div>
+    <h2>各功能用途一覽</h2>
+    <p class="desc">點右上角 ＋ 後出現的七個選項，依照用途分類如下。</p>
+
+    <div class="card">
+      <div class="menu-grid">
+        <div class="menu-card c-teal">
+          <div class="icon">📁</div>
+          <div class="name">New repository</div>
+          <div class="use">建立新的專案資料夾，存放筆記、文件或程式碼</div>
+          <span class="badge">最常用</span>
+        </div>
+        <div class="menu-card c-blue">
+          <div class="icon">📦</div>
+          <div class="name">Import repository</div>
+          <div class="use">把其他地方的專案搬進 GitHub</div>
+          <span class="badge">開發者</span>
+        </div>
+        <div class="menu-card c-purple">
+          <div class="icon">💻</div>
+          <div class="name">New codespace</div>
+          <div class="use">開啟雲端版 VS Code 編輯器，不需安裝任何軟體</div>
+          <span class="badge">開發者</span>
+        </div>
+        <div class="menu-card c-amber">
+          <div class="icon">🎫</div>
+          <div class="name">New issue</div>
+          <div class="use">開一張待辦票，記錄問題、任務或待處理事項</div>
+          <span class="badge">所有人</span>
+        </div>
+        <div class="menu-card c-coral">
+          <div class="icon">📋</div>
+          <div class="name">New gist</div>
+          <div class="use">快速貼上並分享一段文字或程式碼片段</div>
+          <span class="badge">所有人</span>
+        </div>
+        <div class="menu-card c-green">
+          <div class="icon">🗂️</div>
+          <div class="name">New project</div>
+          <div class="use">看板式任務管理，像 Trello 或 Notion 表格</div>
+          <span class="badge">進階用</span>
+        </div>
+        <div class="menu-card c-gray">
+          <div class="icon">🏢</div>
+          <div class="name">New organization</div>
+          <div class="use">建立團隊帳號，讓多人共同管理 repo</div>
+          <span class="badge">團隊用</span>
+        </div>
+      </div>
+
+      <div class="highlight-row">
+        <h3>一般人最常用到的</h3>
+        <ul>
+          <li><span>📁</span>New repository — 建筆記資料夾</li>
+          <li><span>🎫</span>New issue — 記待辦事項</li>
+          <li><span>📋</span>New gist — 快速分享文字</li>
+          <li><span>🗂️</span>New project — 任務管理（進階）</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="back">
+    <a href="index.html">← 回筆記首頁</a>
+  </div>
+
+</div>
+</body>
+</html>
