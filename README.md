@@ -49,7 +49,15 @@
 ### 🌐 GitHub Pages — 免費網站
 把 repo 裡的檔案直接變成網站，免費、不需要租伺服器。
 網址格式：`https://你的帳號.github.io/repo名稱`
+不只是靜態文字頁面，只要是「純前端」的東西都能跑：
 
+- HTML + CSS — 一般網頁、筆記
+- JavaScript — 互動效果、動畫
+- Canvas 遊戲 — 例如打磚塊（🎮[試玩看看](https://simonlifestyles-glitch.github.io/my-githubnotes/Breakout-game.html)）
+- 資料視覺化 — D3.js 圖表
+
+> 規則只有一個：不能有後端（不能連資料庫、不能跑 Python）。
+> 瀏覽器能執行的，GitHub Pages 就能跑。
 ---
 
 ## 三、我能用 GitHub 做什麼？
