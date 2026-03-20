@@ -6,6 +6,8 @@
 
 📊 [圖解筆記（Branch 與功能說明）](https://simonlifestyles-glitch.github.io/my-notes/charts.html)
 
+🗂️ [Repo 導覽列說明（視覺化）](https://simonlifestyles-glitch.github.io/my-notes/navbar.html)
+
 ---
 
 ## 一、GitHub 是什麼？
