@@ -152,7 +152,7 @@ GitHub 上有專門整理資源的清單，格式是 `awesome-[主題]`：
 網址：`https://github.com/trending`
 
 可以篩選語言、時間範圍（Today / This week / This month），是發現新工具的最佳管道。
-
+Code教學`https://github.com/trending`
 ---
 
 ### 找到後怎麼判斷值不值得用？
