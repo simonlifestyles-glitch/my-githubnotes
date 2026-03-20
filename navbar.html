@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Repo 導覽列說明</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Serif+Display&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #1c2128;
+  --border: rgba(255,255,255,0.08);
+  --text: #e6edf3;
+  --muted: #7d8590;
+  --accent: #f78166;
+  --teal: #39d353;
+  --blue: #58a6ff;
+  --purple: #bc8cff;
+  --amber: #e3b341;
+  --pink: #ff7b72;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+.wrap { max-width: 920px; margin: 0 auto; padding: 0 24px; }
+
+/* Hero */
+.hero {
+  padding: 64px 0 52px;
+  border-bottom: 1px solid var(--border);
+}
+.eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  animation: fadeUp 0.5s 0s ease forwards;
+}
+.eyebrow::after { content: ''; width: 32px; height: 1px; background: var(--teal); display: block; }
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(36px, 6vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.1s ease forwards;
+}
+.hero h1 em { font-style: italic; color: var(--blue); }
+.hero-sub {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 500px;
+  font-weight: 300;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.2s ease forwards;
+}
+
+/* Fake navbar */
+.navbar-demo-section { padding: 56px 0; border-bottom: 1px solid var(--border); }
+.section-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.fake-navbar {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0 20px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 32px;
+}
+.fake-navbar::-webkit-scrollbar { display: none; }
+.nav-tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  user-select: none;
+  position: relative;
+}
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+.nav-tab .tab-icon { font-size: 14px; }
+
+/* Cards grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.feature-card {
+  background: var(--bg2);
+  padding: 28px 26px;
+  cursor: pointer;
+  transition: background 0.18s;
+  position: relative;
+  opacity: 0;
+  transform: translateY(12px);
+}
+.feature-card:hover { background: var(--bg3); }
+.feature-card.highlighted { background: var(--bg3); }
+.feature-card .card-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+.feature-card h3 {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+.feature-card p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+.feature-card .badge {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-family: 'Space Mono', monospace;
+}
+.feature-card .corner-dot {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+}
+
+/* Color variants */
+.v-green .card-icon { background: rgba(57,211,83,0.1); }
+.v-green h3 { color: var(--teal); }
+.v-green .badge { background: rgba(57,211,83,0.1); color: var(--teal); }
+.v-green .corner-dot { background: var(--teal); }
+
+.v-blue .card-icon { background: rgba(88,166,255,0.1); }
+.v-blue h3 { color: var(--blue); }
+.v-blue .badge { background: rgba(88,166,255,0.1); color: var(--blue); }
+.v-blue .corner-dot { background: var(--blue); }
+
+.v-purple .card-icon { background: rgba(188,140,255,0.1); }
+.v-purple h3 { color: var(--purple); }
+.v-purple .badge { background: rgba(188,140,255,0.1); color: var(--purple); }
+.v-purple .corner-dot { background: var(--purple); }
+
+.v-amber .card-icon { background: rgba(227,179,65,0.1); }
+.v-amber h3 { color: var(--amber); }
+.v-amber .badge { background: rgba(227,179,65,0.1); color: var(--amber); }
+.v-amber .corner-dot { background: var(--amber); }
+
+.v-pink .card-icon { background: rgba(255,123,114,0.1); }
+.v-pink h3 { color: var(--pink); }
+.v-pink .badge { background: rgba(255,123,114,0.1); color: var(--pink); }
+.v-pink .corner-dot { background: var(--pink); }
+
+.v-gray .card-icon { background: rgba(125,133,144,0.1); }
+.v-gray h3 { color: var(--muted); }
+.v-gray .badge { background: rgba(125,133,144,0.1); color: var(--muted); }
+.v-gray .corner-dot { background: var(--muted); }
+
+/* Flow section */
+.flow-section { padding: 56px 0; border-bottom: 1px solid var(--border); }
+.flow-section h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(24px, 3.5vw, 36px);
+  margin-bottom: 8px;
+}
+.flow-section .lead { color: var(--muted); font-size: 14px; margin-bottom: 40px; font-weight: 300; }
+
+.flow-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin-bottom: 16px;
+}
+.flow-step {
+  flex: 1;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 18px;
+  position: relative;
+  opacity: 0;
+  animation: fadeUp 0.5s ease forwards;
+}
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  color: var(--muted);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.flow-step .step-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+.flow-step h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+.flow-step p { font-size: 12px; color: var(--muted); }
+
+/* Highlight summary */
+.summary-section { padding: 56px 0; }
+.summary-section h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(22px, 3vw, 32px);
+  margin-bottom: 32px;
+}
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.summary-col { background: var(--bg2); padding: 28px; }
+.summary-col h3 {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: 'Space Mono', monospace;
+  margin-bottom: 18px;
+}
+.summary-col.col-yes h3 { color: var(--teal); }
+.summary-col.col-dev h3 { color: var(--muted); }
+.summary-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+  font-size: 14px;
+}
+.summary-item .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+.col-yes .dot { background: var(--teal); }
+.col-dev .dot { background: var(--muted); }
+.summary-item .si-text strong { display: block; font-size: 14px; font-weight: 700; }
+.summary-item .si-text span { font-size: 12px; color: var(--muted); }
+
+/* Footer */
+footer {
+  padding: 32px 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+footer .fn { font-size: 12px; color: var(--muted); font-family: 'Space Mono', monospace; }
+footer a {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--teal);
+  text-decoration: none;
+  border: 1px solid rgba(57,211,83,0.2);
+  padding: 6px 14px;
+  border-radius: 20px;
+  transition: border-color 0.2s;
+}
+footer a:hover { border-color: var(--teal); }
+
+/* Animations */
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.feature-card:nth-child(1) { animation: fadeUp 0.4s 0.05s ease forwards; }
+.feature-card:nth-child(2) { animation: fadeUp 0.4s 0.10s ease forwards; }
+.feature-card:nth-child(3) { animation: fadeUp 0.4s 0.15s ease forwards; }
+.feature-card:nth-child(4) { animation: fadeUp 0.4s 0.20s ease forwards; }
+.feature-card:nth-child(5) { animation: fadeUp 0.4s 0.25s ease forwards; }
+.feature-card:nth-child(6) { animation: fadeUp 0.4s 0.30s ease forwards; }
+.feature-card:nth-child(7) { animation: fadeUp 0.4s 0.35s ease forwards; }
+.feature-card:nth-child(8) { animation: fadeUp 0.4s 0.40s ease forwards; }
+.feature-card:nth-child(9) { animation: fadeUp 0.4s 0.45s ease forwards; }
+
+.flow-step:nth-child(1) { animation-delay: 0.05s; }
+.flow-step:nth-child(3) { animation-delay: 0.15s; }
+.flow-step:nth-child(5) { animation-delay: 0.25s; }
+.flow-step:nth-child(7) { animation-delay: 0.35s; }
+
+@media (max-width: 680px) {
+  .cards-grid { grid-template-columns: 1fr 1fr; }
+  .summary-grid { grid-template-columns: 1fr; }
+  .flow-row { flex-direction: column; gap: 8px; }
+  .flow-arrow { display: none; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+}
+@media (max-width: 440px) {
+  .cards-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Repo 導覽列完整說明</p>
+    <h1>九個功能，<br><em>一次看懂</em></h1>
+    <p class="hero-sub">GitHub repo 上方的九個標籤，每一個都有不同用途。從最常用到進階，全部圖解。</p>
+  </div>
+</section>
+
+<section class="navbar-demo-section">
+  <div class="wrap">
+    <p class="section-label">導覽列長這樣</p>
+
+    <!-- Fake navbar -->
+    <div class="fake-navbar">
+      <div class="nav-tab active"><span class="tab-icon">⟨⟩</span> Code</div>
+      <div class="nav-tab"><span class="tab-icon">◎</span> Issues</div>
+      <div class="nav-tab"><span class="tab-icon">⇄</span> Pull requests</div>
+      <div class="nav-tab"><span class="tab-icon">▶</span> Actions</div>
+      <div class="nav-tab"><span class="tab-icon">▦</span> Projects</div>
+      <div class="nav-tab"><span class="tab-icon">📖</span> Wiki</div>
+      <div class="nav-tab"><span class="tab-icon">🛡</span> Security</div>
+      <div class="nav-tab"><span class="tab-icon">📈</span> Insights</div>
+      <div class="nav-tab"><span class="tab-icon">⚙</span> Settings</div>
+    </div>
+
+    <!-- 9 cards -->
+    <div class="cards-grid">
+
+      <div class="feature-card v-green">
+        <div class="corner-dot"></div>
+        <div class="card-icon">⟨⟩</div>
+        <h3>Code</h3>
+        <p>瀏覽所有檔案、編輯內容、查看每次 commit 的修改歷史。進 repo 第一個看到的地方。</p>
+        <span class="badge">最常用</span>
+      </div>
+
+      <div class="feature-card v-blue">
+        <div class="corner-dot"></div>
+        <div class="card-icon">◎</div>
+        <h3>Issues</h3>
+        <p>開待辦票、回報問題、追蹤任務進度。可以加標籤、指派負責人、設截止日期。</p>
+        <span class="badge">所有人</span>
+      </div>
+
+      <div class="feature-card v-purple">
+        <div class="corner-dot"></div>
+        <div class="card-icon">⇄</div>
+        <h3>Pull requests</h3>
+        <p>在 branch 上改好後，提交一份「申請合併」讓別人審核，確認沒問題才合進 main。</p>
+        <span class="badge">協作用</span>
+      </div>
+
+      <div class="feature-card v-amber">
+        <div class="corner-dot"></div>
+        <div class="card-icon">▶</div>
+        <h3>Actions</h3>
+        <p>查看自動化流程的執行紀錄。每次 commit 後的自動部署、測試結果都在這裡顯示。</p>
+        <span class="badge">常用</span>
+      </div>
+
+      <div class="feature-card v-blue">
+        <div class="corner-dot"></div>
+        <div class="card-icon">▦</div>
+        <h3>Projects</h3>
+        <p>看板式任務管理，可以建立「待辦 / 進行中 / 完成」欄位，就像輕量版的 Trello。</p>
+        <span class="badge">進階用</span>
+      </div>
+
+      <div class="feature-card v-purple">
+        <div class="corner-dot"></div>
+        <div class="card-icon">📖</div>
+        <h3>Wiki</h3>
+        <p>撰寫專案的說明文件，像一本內部百科全書。適合放詳細的操作說明或背景資料。</p>
+        <span class="badge">團隊用</span>
+      </div>
+
+      <div class="feature-card v-pink">
+        <div class="corner-dot"></div>
+        <div class="card-icon">🛡</div>
+        <h3>Security</h3>
+        <p>檢查 repo 裡有沒有安全漏洞或意外洩露的密碼、API 金鑰等敏感資訊。</p>
+        <span class="badge">開發者</span>
+      </div>
+
+      <div class="feature-card v-amber">
+        <div class="corner-dot"></div>
+        <div class="card-icon">📈</div>
+        <h3>Insights</h3>
+        <p>查看 repo 的統計數據：有多少人看過、貢獻者活動、commit 頻率、流量來源。</p>
+        <span class="badge">進階用</span>
+      </div>
+
+      <div class="feature-card v-gray">
+        <div class="corner-dot"></div>
+        <div class="card-icon">⚙</div>
+        <h3>Settings</h3>
+        <p>管理 repo 的一切設定：開啟 GitHub Pages、設定權限、改名稱、或刪除 repo。</p>
+        <span class="badge">管理者</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Typical workflow -->
+<section class="flow-section">
+  <div class="wrap">
+    <p class="section-label">典型使用流程</p>
+    <h2>一般人進 repo 的操作順序</h2>
+    <p class="lead">大部分時候你只會用到前四個，其他的需要時再去找就好。</p>
+
+    <div class="flow-row">
+      <div class="flow-step v-green" style="border-color: rgba(57,211,83,0.2);">
+        <div class="step-num">STEP 01</div>
+        <h4 style="color: var(--teal);">Code</h4>
+        <p>進來看檔案、編輯內容</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step v-blue" style="border-color: rgba(88,166,255,0.2);">
+        <div class="step-num">STEP 02</div>
+        <h4 style="color: var(--blue);">Commit</h4>
+        <p>存檔，記錄這次修改</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step v-amber" style="border-color: rgba(227,179,65,0.2);">
+        <div class="step-num">STEP 03</div>
+        <h4 style="color: var(--amber);">Actions</h4>
+        <p>確認自動部署有成功</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step v-blue" style="border-color: rgba(88,166,255,0.2);">
+        <div class="step-num">STEP 04</div>
+        <h4 style="color: var(--blue);">Issues</h4>
+        <p>記下下次要做的事</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Summary -->
+<section class="summary-section">
+  <div class="wrap">
+    <h2>快速分類總覽</h2>
+    <div class="summary-grid">
+
+      <div class="summary-col col-yes">
+        <h3>⭐ 一般人常用</h3>
+        <div class="summary-item">
+          <div class="dot"></div>
+          <div class="si-text">
+            <strong>Code</strong>
+            <span>瀏覽、編輯所有檔案</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <div class="dot"></div>
+          <div class="si-text">
+            <strong>Issues</strong>
+            <span>記待辦、追蹤問題</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <div class="dot"></div>
+          <div class="si-text">
+            <strong>Actions</strong>
+            <span>確認自動部署狀態</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <div class="dot"></div>
+          <div class="si-text">
+            <strong>Settings</strong>
+            <span>開 Pages、管理設定</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-col col-dev">
+        <h3>── 進階 / 團隊用</h3>
+        <div class="summary-item">
+          <div class="dot"></div>
+          <div class="si-text">
+            <strong>Pull requests</strong>
+            <span>多人協作審核合併</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <div class="dot"></div>
+          <div class="si-text">
+            <strong>Projects</strong>
+            <span>看板式任務管理</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <div class="dot"></div>
+          <div class="si-text">
+            <strong>Wiki</strong>
+            <span>撰寫詳細說明文件</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <div class="dot"></div>
+          <div class="si-text">
+            <strong>Security / Insights</strong>
+            <span>安全檢查與數據統計</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;width:100%">
+    <span class="fn">my-notes / navbar-guide</span>
+    <a href="index.html">← 回筆記首頁</a>
+  </div>
+</footer>
+
+</body>
+</html>
