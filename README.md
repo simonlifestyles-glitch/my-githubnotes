@@ -208,6 +208,12 @@ my-notes/
 │   └── navbar.html
 └── notebooks/         ← 程式碼筆記 (.ipynb)，有需要再建
 ```
+### ⚠️ GitHub 不能直接建立空資料夾，一定要「資料夾 + 檔案一起建」
+1. 進到你的 repository（專案頁面）
+2. 點擊 Add file → Create new file
+3. 例如：在檔名輸入：folder_name/README.md
+4. 往下拉，隨便寫點內容（例如：# Python Notes）
+5. 點 Commit changes
 
 ### 🤟三種主要檔案格式
 
